@@ -1,0 +1,26 @@
+runcharts:
+  - title: Search engine response time
+    position: [[0, 0], [80, 25]]
+    rate-ms: 1000
+    triggers:
+      - title: Latency threshold exceeded
+        condition: echo "$prev < 0.8 && $cur > 0.8" |bc -l
+        actions:
+            terminal-bell: true
+            sound: true
+            visual: true
+            script: 'say alert: ${label} latency exceeded ${cur} second'
+    legend:
+        enabled: true
+        details: false
+    items:
+      - label: GOOGLE
+        color: 178
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://www.google.com
+      - label: BAIDU
+        sample: curl -o /dev/null -s -w '%{time_total}'  https://www.baidu.com
+sparklines:
+  - title: CPU usage
+    position: [[0, 26], [80, 15]]
+    rate-ms: 1000
+    sample: ps -A -o %cpu | awk '{s+=$1} END {print s}'
